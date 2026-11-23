@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>高中職教師教學網址繳交成果｜AI工具串聯研習平台</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Noto Sans TC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Noto Sans TC"', 'Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            brandNavy: '#101828',
+            brandGreen: '#3F834F',
+            brandGreenHover: '#336D40',
+            brandMint: '#7CE8A8',
+            pageBg: '#F4F7FA',
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-pageBg text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- 主要內容容器 -->
+  <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex-1">
+
+    <!-- 頂部深色主視覺橫幅 (參考圖片風格) -->
+    <header class="bg-brandNavy text-white rounded-3xl px-6 py-7 sm:px-10 sm:py-9 shadow-lg relative overflow-hidden">
+      <!-- 細微裝飾光暈 -->
+      <div class="pointer-events-none absolute -top-20 -right-20 w-72 h-72 rounded-full bg-emerald-500/10 blur-3xl"></div>
+      <div class="relative z-10">
+        <p class="text-brandMint text-sm sm:text-base font-semibold tracking-wide mb-2">
+          AI工具串聯－打造教師專屬智慧教學平台研習成果
+        </p>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white mb-3">
+          高中職教師教學網址繳交成果
+        </h1>
+        <p class="text-slate-300 text-sm sm:text-base font-normal">
+          AI工具串聯－打造教師專屬智慧教學平台研習成果
+        </p>
+      </div>
+    </header>
+
+    <!-- 頂部頁面切換導覽列 -->
+    <nav class="flex flex-wrap items-center gap-3 mt-5 mb-6" aria-label="主要功能切換">
+      <button
+        id="navShowcaseBtn"
+        type="button"
+        class="px-5 py-2.5 rounded-xl text-sm sm:text-base font-semibold transition-all duration-200 border shadow-sm cursor-pointer bg-white text-slate-800 border-slate-300 hover:bg-slate-50"
+      >
+        成果展示
+      </button>
+      <button
+        id="navFormBtn"
+        type="button"
+        class="px-5 py-2.5 rounded-xl text-sm sm:text-base font-semibold transition-all duration-200 border shadow-sm cursor-pointer bg-brandGreen text-white border-brandGreen hover:bg-brandGreenHover"
+      >
+        網址繳交表單
+      </button>
+      <!-- 已登入狀態徽章 -->
+      <div id="authStatusBadge" class="hidden ml-auto flex items-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-200 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+        <span>已驗證帳號：chonu</span>
+        <button
+          id="logoutBtn"
+          type="button"
+          class="ml-2 text-emerald-700 hover:text-emerald-950 underline font-semibold cursor-pointer"
+        >
+          登出
+        </button>
+      </div>
+      <!-- 雲端同步狀態指示 -->
+      <div id="cloudStatusBadge" class="flex items-center gap-2 bg-white text-slate-600 border border-slate-200 px-3.5 py-2 rounded-xl text-xs font-medium shadow-2xs">
+        <span id="cloudStatusDot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse inline-block"></span>
+        <span id="cloudStatusText">雲端連線中...</span>
+      </div>
+    </nav>
+
+    <!-- ==================== 區塊一：教師網址繳交表單 ==================== -->
+    <section id="formSection" class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-8 lg:p-10">
+      <div class="border-b border-slate-100 pb-5 mb-6">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">教學網址繳交表單（高中職教師專用）</h2>
+            <p class="text-slate-500 text-sm sm:text-base mt-1">
+              請研習教師於課程結束後具名填寫已完成的教學網站或 AI 教學工具網址，支援一次繳交多組連結。
+            </p>
+          </div>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            具名收集｜公開展示時隱藏個資
+          </span>
+        </div>
+      </div>
+
+      <form id="submissionForm" novalidate class="space-y-6">
+        <!-- 教師基本資料 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <!-- 教師姓名 -->
+          <div>
+            <label for="teacherName" class="block text-sm font-bold text-slate-800 mb-1.5">
+              教師姓名 <span class="text-rose-500">*</span>
+            </label>
+            <input
+              id="teacherName"
+              name="teacherName"
+              type="text"
+              required
+              placeholder="請輸入您的姓名（例如：陳小合）"
+              class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm sm:text-base text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brandGreen/30 focus:border-brandGreen transition"
+            />
+            <p class="hidden text-xs text-rose-600 mt-1" id="errTeacherName">請填寫教師姓名</p>
+          </div>
+
+          <!-- 電子郵件 -->
+          <div>
+            <label for="teacherEmail" class="block text-sm font-bold text-slate-800 mb-1.5">
+              電子郵件 <span class="text-rose-500">*</span>
+            </label>
+            <input
+              id="teacherEmail"
+              name="teacherEmail"
+              type="email"
+              required
+              placeholder="例如：teacher@school.edu.tw"
+              class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm sm:text-base text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brandGreen/30 focus:border-brandGreen transition"
+            />
+            <p class="hidden text-xs text-rose-600 mt-1" id="errTeacherEmail">請填寫有效的電子郵件地址</p>
+          </div>
+
+          <!-- 服務學校 -->
+          <div>
+            <label for="teacherSchool" class="block text-sm font-bold text-slate-800 mb-1.5">
+              服務學校（高中／高職） <span class="text-rose-500">*</span>
+            </label>
+            <input
+              id="teacherSchool"
+              name="teacherSchool"
+              type="text"
+              required
+              placeholder="例如：國立花蓮高商、國立花蓮高工"
+              class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm sm:text-base text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brandGreen/30 focus:border-brandGreen transition"
+            />
+            <p class="hidden text-xs text-rose-600 mt-1" id="errTeacherSchool">請填寫服務學校名稱</p>
+          </div>
+
+          <!-- 任教科別或領域 -->
+          <div>
+            <label for="teacherSubject" class="block text-sm font-bold text-slate-800 mb-1.5">
+              任教科別或領域 <span class="text-rose-500">*</span>
+            </label>
+            <select
+              id="teacherSubject"
+              name="teacherSubject"
+              required
+              class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm sm:text-base text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-brandGreen/30 focus:border-brandGreen transition"
+            >
+              <option value="">請選擇任教科別或領域</option>
+              <option value="國文科">國文科</option>
+              <option value="英文科">英文科</option>
+              <option value="數學科">數學科</option>
+              <option value="自然科學領域">自然科學領域（物理／化學／生物／地科）</option>
+              <option value="社會領域">社會領域（歷史／地理／公民）</option>
+              <option value="資訊科技／資訊科">資訊科技／資訊科</option>
+              <option value="電機與電子群">電機與電子群</option>
+              <option value="機械／動力機械群">機械／動力機械群</option>
+              <option value="商業與管理群">商業與管理群</option>
+              <option value="設計／藝術群">設計／藝術群</option>
+              <option value="餐旅／家政群">餐旅／家政群</option>
+              <option value="外語群">外語群</option>
+              <option value="綜合活動／健體／特教">綜合活動／健體／特教</option>
+              <option value="其他">其他（請於下方自行輸入）</option>
+            </select>
+            <input
+              id="customSubjectInput"
+              type="text"
+              placeholder="請輸入您的任教科別或領域"
+              class="hidden mt-2 w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brandGreen/30 focus:border-brandGreen transition"
+            />
+            <p class="hidden text-xs text-rose-600 mt-1" id="errTeacherSubject">請選擇或輸入任教科別或領域</p>
+          </div>
+        </div>
+
+        <!-- 教學網址清單區塊 -->
+        <div class="pt-2">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <div>
+              <h3 class="text-base font-bold text-slate-900">教學網址清單 <span class="text-rose-500">*</span></h3>
+              <p class="text-xs sm:text-sm text-slate-500">每個網址都會自動轉換為可點擊的超連結，並於新視窗開啟。</p>
+            </div>
+            <button
+              id="addUrlRowBtn"
+              type="button"
+              class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-brandGreen bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition cursor-pointer"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+              新增一組教學網址
+            </button>
+          </div>
+
+          <div id="urlRowsContainer" class="space-y-4">
+            <!-- 動態網址列將由 JS 插入 -->
+          </div>
+        </div>
+
+        <!-- 送出按鈕 -->
+        <div class="flex flex-wrap items-center justify-end gap-3 pt-4 border-t border-slate-100">
+          <button
+            id="resetFormBtn"
+            type="button"
+            class="px-5 py-3 rounded-xl text-sm sm:text-base font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition cursor-pointer"
+          >
+            清除重填
+          </button>
+          <button
+            id="submitFormBtn"
+            type="submit"
+            class="px-7 py-3 rounded-xl text-sm sm:text-base font-bold text-white bg-brandGreen hover:bg-brandGreenHover shadow-md shadow-emerald-900/10 transition cursor-pointer flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+            <span id="submitFormBtnText">送出教學網址成果</span>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ==================== 區塊二：成果展示驗證登入畫面 ==================== -->
+    <section id="loginSection" class="hidden bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-10 max-w-lg mx-auto my-4">
+      <div class="text-center mb-6">
+        <div class="w-14 h-14 mx-auto mb-4 rounded-2xl bg-brandNavy text-brandMint flex items-center justify-center shadow-md">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+          </svg>
+        </div>
+        <h2 class="text-2xl font-bold text-slate-900">成果展示驗證登入</h2>
+        <p class="text-slate-500 text-sm mt-1.5">
+          請輸入授權帳號與密碼，以檢視「教學網址繳交成果」與管理資料。
+        </p>
+      </div>
+
+      <form id="loginForm" class="space-y-4" novalidate>
+        <div>
+          <label for="loginUsername" class="block text-sm font-bold text-slate-800 mb-1.5">帳號</label>
+          <input
+            id="loginUsername"
+            type="text"
+            autocomplete="username"
+            placeholder="請輸入帳號"
+            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-base text-slate-800 focus:outline-none focus:ring-2 focus:ring-brandGreen/30 focus:border-brandGreen transition"
+          />
+        </div>
+        <div>
+          <label for="loginPassword" class="block text-sm font-bold text-slate-800 mb-1.5">密碼</label>
+          <input
+            id="loginPassword"
+            type="password"
+            autocomplete="current-password"
+            placeholder="請輸入密碼"
+            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-base text-slate-800 focus:outline-none focus:ring-2 focus:ring-brandGreen/30 focus:border-brandGreen transition"
+          />
+        </div>
+
+        <div id="loginErrorMsg" class="hidden rounded-xl bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-700 font-medium">
+          帳號或密碼錯誤，請重新確認後再試。
+        </div>
+
+        <button
+          type="submit"
+          class="w-full py-3 rounded-xl text-base font-bold text-white bg-brandGreen hover:bg-brandGreenHover shadow-sm transition cursor-pointer mt-2"
+        >
+          登入檢視成果
+        </button>
+      </form>
+    </section>
+
+    <!-- ==================== 區塊三：教學網址繳交成果儀表板 (登入後呈現，完全參考圖片設計) ==================== -->
+    <section id="showcaseSection" class="hidden bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-8 lg:p-10">
+      <!-- 標題與說明 -->
+      <div class="mb-5">
+        <h2 class="text-2xl font-bold text-slate-900">教學網址繳交成果</h2>
+        <p id="showcaseSubtitle" class="text-slate-600 text-sm sm:text-base mt-1.5">
+          瀏覽研習教師分享的教學活動與課程資源。公開展示不提供教師姓名或電子郵件。
+        </p>
+      </div>
+
+      <!-- 模式切換與工具列 (參考圖片按鈕樣式) -->
+      <div class="flex flex-wrap items-center gap-3 mb-6">
+        <button
+          id="modePublicBtn"
+          type="button"
+          class="px-5 py-2.5 rounded-xl text-sm sm:text-base font-bold transition cursor-pointer bg-white text-slate-900 border-2 border-brandGreen border-b-4"
+        >
+          一般「成果展示」
+        </button>
+        <button
+          id="modeAdminBtn"
+          type="button"
+          class="px-5 py-2.5 rounded-xl text-sm sm:text-base font-semibold transition cursor-pointer bg-white text-slate-700 border border-slate-300 hover:bg-slate-50"
+        >
+          管理者檢視
+        </button>
+        <button
+          id="refreshDataBtn"
+          type="button"
+          class="px-5 py-2.5 rounded-xl text-sm sm:text-base font-semibold transition cursor-pointer bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 inline-flex items-center gap-2"
+        >
+          <svg id="refreshIcon" class="w-4 h-4 text-slate-500 transition-transform duration-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
+          重新整理成果資料
+        </button>
+
+        <!-- 管理者專用：匯出 CSV -->
+        <button
+          id="exportCsvBtn"
+          type="button"
+          class="hidden ml-auto px-4 py-2.5 rounded-xl text-sm font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition cursor-pointer inline-flex items-center gap-1.5"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+          </svg>
+          匯出 CSV 清單
+        </button>
+      </div>
+
+      <!-- 4 個統計數據卡片 (參考圖片 4 欄配置) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+        <div class="rounded-2xl border border-slate-200/90 bg-white px-5 py-4">
+          <p class="text-sm text-slate-500 font-medium mb-1.5">已提交教師人數</p>
+          <p id="statTeachers" class="text-2xl sm:text-3xl font-bold text-slate-900">—</p>
+        </div>
+        <div class="rounded-2xl border border-slate-200/90 bg-white px-5 py-4">
+          <p class="text-sm text-slate-500 font-medium mb-1.5">教學網址總數</p>
+          <p id="statUrls" class="text-2xl sm:text-3xl font-bold text-slate-900">—</p>
+        </div>
+        <div class="rounded-2xl border border-slate-200/90 bg-white px-5 py-4">
+          <p class="text-sm text-slate-500 font-medium mb-1.5">涵蓋學校數</p>
+          <p id="statSchools" class="text-2xl sm:text-3xl font-bold text-slate-900">—</p>
+        </div>
+        <div class="rounded-2xl border border-slate-200/90 bg-white px-5 py-4">
+          <p class="text-sm text-slate-500 font-medium mb-1.5">最後更新時間</p>
+          <p id="statLastUpdate" class="text-lg sm:text-xl font-bold text-slate-900 leading-snug pt-1">—</p>
+        </div>
+      </div>
+
+      <!-- 統計說明附註 (參考圖片文字) -->
+      <p class="text-xs sm:text-sm text-slate-500 mb-6">
+        教師人數以提交紀錄數計算；同一教師多次提交可能重複計入。最後更新時間取自最新提交紀錄。
+      </p>
+
+      <!-- 搜尋與篩選控制區 (參考圖片 2 欄排列) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div>
+          <label for="searchInput" class="block text-sm font-bold text-slate-800 mb-2">
+            搜尋學校、科別或課程名稱
+          </label>
+          <input
+            id="searchInput"
+            type="text"
+            placeholder="輸入關鍵字"
+            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm sm:text-base text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brandGreen/30 focus:border-brandGreen transition"
+          />
+        </div>
+
+        <div>
+          <label for="schoolFilter" class="block text-sm font-bold text-slate-800 mb-2">
+            篩選服務學校
+          </label>
+          <select
+            id="schoolFilter"
+            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm sm:text-base text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-brandGreen/30 focus:border-brandGreen transition"
+          >
+            <option value="">全部學校</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="subjectFilter" class="block text-sm font-bold text-slate-800 mb-2">
+            篩選任教科別或領域
+          </label>
+          <select
+            id="subjectFilter"
+            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm sm:text-base text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-brandGreen/30 focus:border-brandGreen transition"
+          >
+            <option value="">全部科別或領域</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 篩選結果筆數列 -->
+      <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-4 border-b border-slate-100">
+        <p id="resultCountText" class="text-sm font-medium text-slate-600">
+          顯示 0 筆提交紀錄
+        </p>
+        <button
+          id="clearFiltersBtn"
+          type="button"
+          class="hidden text-sm font-semibold text-brandGreen hover:underline cursor-pointer"
+        >
+          清除篩選條件
+        </button>
+      </div>
+
+      <!-- 成果列表容器 -->
+      <div id="resultsList" class="space-y-4">
+        <!-- 動態成果卡片將由 JS 渲染 -->
+      </div>
+    </section>
+
+  </div>
+
+  <!-- 頁尾 -->
+  <footer class="py-6 px-4 text-center text-xs text-slate-400 space-y-1">
+    <p>AI工具串聯－打造教師專屬智慧教學平台研習成果系統｜高中職教師教學資源共享平台</p>
+    <p id="cloudUserIdDisplay" class="text-[11px] text-slate-400 break-all"></p>
+  </footer>
+
+  <!-- 自訂通知 Toast (取代 alert) -->
+  <div
+    id="toastContainer"
+    class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-[calc(100%-2.5rem)] pointer-events-none"
+    aria-live="polite"
+  ></div>
+
+  <!-- 提交成功確認視窗 (Modal) -->
+  <div id="successModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 text-center">
+      <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-emerald-100 text-brandGreen flex items-center justify-center">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+        </svg>
+      </div>
+      <h3 class="text-xl font-bold text-slate-900 mb-2">教學網址繳交成功！</h3>
+      <p id="successModalMsg" class="text-slate-600 text-sm mb-6">
+        感謝老師的分享，您的教學網址已成功登錄至研習成果系統中。
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <button
+          id="modalContinueBtn"
+          type="button"
+          class="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition cursor-pointer"
+        >
+          繼續填寫其他網址
+        </button>
+        <button
+          id="modalGoShowcaseBtn"
+          type="button"
+          class="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-brandGreen hover:bg-brandGreenHover transition cursor-pointer"
+        >
+          前往成果展示
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 刪除確認視窗 (取代 confirm) -->
+  <div id="deleteModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100">
+      <h3 class="text-lg font-bold text-slate-900 mb-2">確認刪除此筆提交紀錄？</h3>
+      <p id="deleteModalDesc" class="text-slate-600 text-sm mb-6">
+        刪除後將無法復原此筆教師提交的教學網址資料。
+      </p>
+      <div class="flex justify-end gap-3">
+        <button
+          id="cancelDeleteBtn"
+          type="button"
+          class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition cursor-pointer"
+        >
+          取消
+        </button>
+        <button
+          id="confirmDeleteBtn"
+          type="button"
+          class="px-4 py-2 rounded-xl text-sm font-bold text-white bg-rose-600 hover:bg-rose-700 transition cursor-pointer disabled:opacity-60"
+        >
+          確定刪除
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    /**
+     * =========================================================================
+     * 高中職教師教學網址繳交成果平台 - 核心邏輯（整合雲端即時資料庫與安全鎖）
+     * =========================================================================
+     */
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js';
+    import {
+      getAuth,
+      signInAnonymously,
+      signInWithCustomToken,
+      onAuthStateChanged,
+    } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';
+    import {
+      getFirestore,
+      collection,
+      doc,
+      addDoc,
+      deleteDoc,
+      getDocs,
+      onSnapshot,
+    } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
+
+    // 授權帳號密碼設定（用於檢視成果展示與管理者後台）
+    const AUTH_CREDENTIALS = {
+      username: 'chonu',
+      password: 'admin',
+    };
+
+    // =========================================================================
+    // 【自行架設／下載使用時，請將 Firebase 設定貼在下方】
+    // 若在內建預覽環境中執行，系統會自動讀取環境變數，無須手動填寫。
+    // =========================================================================
+    const MANUAL_FIREBASE_CONFIG = {
+      apiKey: 'AIzaSyAhpBQd11jqU9T-l-Zmg_V3udRaM0VoHQ0',
+      authDomain: 'teacher-links-e0327.firebaseapp.com',
+      projectId: 'teacher-links-e0327',
+      storageBucket: 'teacher-links-e0327.firebasestorage.app',
+      messagingSenderId: '897772739117',
+      appId: '1:897772739117:web:190390a434820f599db6a4',
+    };
+
+    // 環境變數設定（優先讀取系統環境變數，若無則讀取上方手動填入的設定）
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+    const firebaseConfig =
+      typeof __firebase_config !== 'undefined'
+        ? JSON.parse(__firebase_config)
+        : MANUAL_FIREBASE_CONFIG.apiKey
+          ? MANUAL_FIREBASE_CONFIG
+          : null;
+    const initialAuthToken =
+      typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+    // 雲端服務實例
+    let db = null;
+    let auth = null;
+    let currentUser = null;
+    let unsubscribeSubmissions = null;
+
+    // 系統狀態管理
+    const appState = {
+      currentTab: 'form',        // 'form' | 'showcase'
+      isAuthenticated: false,    // 是否已透過 chonu / admin 驗證
+      viewMode: 'public',        // 'public' (一般成果展示) | 'admin' (管理者檢視)
+      pendingDeleteId: null,     // 待刪除的紀錄 ID
+      isLoadingCloud: true,      // 雲端資料是否正在載入
+      cloudReady: false,         // 雲端連線是否已就緒
+      submissions: [],           // 由雲端即時同步的提交紀錄陣列
+    };
+
+    // DOM 元素參考
+    const dom = {
+      navShowcaseBtn: document.getElementById('navShowcaseBtn'),
+      navFormBtn: document.getElementById('navFormBtn'),
+      authStatusBadge: document.getElementById('authStatusBadge'),
+      logoutBtn: document.getElementById('logoutBtn'),
+      cloudStatusDot: document.getElementById('cloudStatusDot'),
+      cloudStatusText: document.getElementById('cloudStatusText'),
+      cloudUserIdDisplay: document.getElementById('cloudUserIdDisplay'),
+
+      formSection: document.getElementById('formSection'),
+      loginSection: document.getElementById('loginSection'),
+      showcaseSection: document.getElementById('showcaseSection'),
+
+      // 表單元素
+      submissionForm: document.getElementById('submissionForm'),
+      submitFormBtn: document.getElementById('submitFormBtn'),
+      submitFormBtnText: document.getElementById('submitFormBtnText'),
+      teacherName: document.getElementById('teacherName'),
+      teacherEmail: document.getElementById('teacherEmail'),
+      teacherSchool: document.getElementById('teacherSchool'),
+      teacherSubject: document.getElementById('teacherSubject'),
+      customSubjectInput: document.getElementById('customSubjectInput'),
+      urlRowsContainer: document.getElementById('urlRowsContainer'),
+      addUrlRowBtn: document.getElementById('addUrlRowBtn'),
+      resetFormBtn: document.getElementById('resetFormBtn'),
+
+      // 登入表單元素
+      loginForm: document.getElementById('loginForm'),
+      loginUsername: document.getElementById('loginUsername'),
+      loginPassword: document.getElementById('loginPassword'),
+      loginErrorMsg: document.getElementById('loginErrorMsg'),
+
+      // 成果展示元素
+      showcaseSubtitle: document.getElementById('showcaseSubtitle'),
+      modePublicBtn: document.getElementById('modePublicBtn'),
+      modeAdminBtn: document.getElementById('modeAdminBtn'),
+      refreshDataBtn: document.getElementById('refreshDataBtn'),
+      refreshIcon: document.getElementById('refreshIcon'),
+      exportCsvBtn: document.getElementById('exportCsvBtn'),
+      statTeachers: document.getElementById('statTeachers'),
+      statUrls: document.getElementById('statUrls'),
+      statSchools: document.getElementById('statSchools'),
+      statLastUpdate: document.getElementById('statLastUpdate'),
+      searchInput: document.getElementById('searchInput'),
+      schoolFilter: document.getElementById('schoolFilter'),
+      subjectFilter: document.getElementById('subjectFilter'),
+      resultCountText: document.getElementById('resultCountText'),
+      clearFiltersBtn: document.getElementById('clearFiltersBtn'),
+      resultsList: document.getElementById('resultsList'),
+
+      // 視窗與通知
+      toastContainer: document.getElementById('toastContainer'),
+      successModal: document.getElementById('successModal'),
+      successModalMsg: document.getElementById('successModalMsg'),
+      modalContinueBtn: document.getElementById('modalContinueBtn'),
+      modalGoShowcaseBtn: document.getElementById('modalGoShowcaseBtn'),
+      deleteModal: document.getElementById('deleteModal'),
+      deleteModalDesc: document.getElementById('deleteModalDesc'),
+      cancelDeleteBtn: document.getElementById('cancelDeleteBtn'),
+      confirmDeleteBtn: document.getElementById('confirmDeleteBtn'),
+    };
+
+    /**
+     * 更新頂部雲端同步狀態顯示
+     */
+    function updateCloudStatus(status, text) {
+      dom.cloudStatusText.textContent = text;
+      dom.cloudStatusDot.className = 'w-2 h-2 rounded-full inline-block';
+      if (status === 'connected') {
+        dom.cloudStatusDot.classList.add('bg-emerald-500');
+      } else if (status === 'error') {
+        dom.cloudStatusDot.classList.add('bg-rose-500');
+      } else {
+        dom.cloudStatusDot.classList.add('bg-amber-400', 'animate-pulse');
+      }
+    }
+
+    /**
+     * 取得公開共享的雲端資料集合參考
+     * 嚴格遵循路徑規則：/artifacts/{appId}/public/data/submissions
+     */
+    function getSubmissionsCollectionRef() {
+      return collection(db, 'artifacts', appId, 'public', 'data', 'submissions');
+    }
+
+    /**
+     * 將雲端文件列表轉換並依提交時間由新到舊排序（記憶體內排序）
+     */
+    function parseAndSortSnapshot(snapshot) {
+      const records = [];
+      snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        records.push({
+          id: docSnap.id,
+          teacherName: data.teacherName || '',
+          teacherEmail: data.teacherEmail || '',
+          school: data.school || '',
+          subject: data.subject || '',
+          submittedAt: data.submittedAt || '',
+          createdAtMs: typeof data.createdAtMs === 'number' ? data.createdAtMs : 0,
+          urls: Array.isArray(data.urls) ? data.urls : [],
+        });
+      });
+
+      // 在 JavaScript 記憶體中依時間倒序排列（最新提交在最上方）
+      records.sort((a, b) => b.createdAtMs - a.createdAtMs);
+      return records;
+    }
+
+    /**
+     * 啟動雲端即時監聽
+     */
+    function startRealtimeSync() {
+      if (!db || !currentUser) return;
+      if (unsubscribeSubmissions) {
+        unsubscribeSubmissions();
+      }
+
+      const colRef = getSubmissionsCollectionRef();
+      unsubscribeSubmissions = onSnapshot(
+        colRef,
+        (snapshot) => {
+          appState.submissions = parseAndSortSnapshot(snapshot);
+          appState.isLoadingCloud = false;
+          appState.cloudReady = true;
+          updateCloudStatus('connected', '雲端已同步');
+
+          if (appState.currentTab === 'showcase' && appState.isAuthenticated) {
+            renderShowcase();
+          }
+        },
+        (error) => {
+          console.error('雲端資料即時同步失敗：', error);
+          appState.isLoadingCloud = false;
+          updateCloudStatus('error', '雲端同步異常');
+          showToast('讀取雲端資料時發生錯誤，請稍後重試。', 'error');
+        }
+      );
+    }
+
+    /**
+     * 初始化雲端連線與身份驗證（先完成驗證再進行任何讀寫）
+     */
+    async function initCloudStorage() {
+      if (!firebaseConfig) {
+        appState.isLoadingCloud = false;
+        updateCloudStatus('error', '尚未偵測到雲端設定');
+        return;
+      }
+
+      try {
+        updateCloudStatus('connecting', '雲端連線中...');
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        auth = getAuth(app);
+
+        // 先執行驗證並等待完成
+        if (initialAuthToken) {
+          await signInWithCustomToken(auth, initialAuthToken);
+        } else {
+          await signInAnonymously(auth);
+        }
+
+        // 監聽驗證狀態並啟動雲端同步
+        onAuthStateChanged(auth, (user) => {
+          currentUser = user;
+          if (user) {
+            dom.cloudUserIdDisplay.textContent = `連線識別碼：${user.uid}`;
+            startRealtimeSync();
+          } else {
+            dom.cloudUserIdDisplay.textContent = '';
+            updateCloudStatus('error', '雲端驗證中斷');
+          }
+        });
+      } catch (error) {
+        console.error('雲端服務初始化失敗：', error);
+        appState.isLoadingCloud = false;
+        updateCloudStatus('error', '雲端連線失敗');
+        showToast('無法連線至雲端資料庫，請檢查網路狀態。', 'error');
+      }
+    }
+
+    /**
+     * 安全跳脫 HTML 字元，防止 XSS
+     */
+    function escapeHtml(str) {
+      if (typeof str !== 'string') return '';
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    /**
+     * 顯示右下角自訂 Toast 通知（取代瀏覽器 alert）
+     */
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      const colorMap = {
+        success: 'bg-emerald-700 text-white border-emerald-600',
+        error: 'bg-rose-600 text-white border-rose-500',
+        info: 'bg-brandNavy text-white border-slate-700',
+      };
+      toast.className = `pointer-events-auto rounded-2xl border px-4 py-3 text-sm font-medium shadow-lg transition-all duration-300 opacity-0 translate-y-2 ${colorMap[type] || colorMap.info}`;
+      toast.textContent = message;
+      dom.toastContainer.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('opacity-0', 'translate-y-2');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    /**
+     * 驗證並標準化教學網址（自動補上 https:// 並驗證格式）
+     */
+    function normalizeUrl(rawUrl) {
+      const trimmed = rawUrl.trim();
+      if (!trimmed) return null;
+      const candidate = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+      try {
+        const parsed = new URL(candidate);
+        if ((parsed.protocol === 'http:' || parsed.protocol === 'https:') && parsed.hostname.includes('.')) {
+          return parsed.href;
+        }
+        return null;
+      } catch {
+        return null;
+      }
+    }
+
+    /**
+     * 取得目前格式化時間（YYYY/MM/DD HH:mm）
+     */
+    function getFormattedNow() {
+      const now = new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      return `${now.getFullYear()}/${pad(now.getMonth() + 1)}/${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    }
+
+    /**
+     * 建立一組教學網址輸入區塊
+     */
+    function createUrlRow(index) {
+      const row = document.createElement('div');
+      row.className = 'url-row rounded-2xl border border-slate-200 bg-slate-50/70 p-4 sm:p-5 space-y-3';
+      row.innerHTML = `
+        <div class="flex items-center justify-between gap-2">
+          <span class="url-row-label text-sm font-bold text-slate-800">教學網址 #${index + 1}</span>
+          <button
+            type="button"
+            class="remove-url-row-btn hidden text-xs font-semibold text-rose-600 hover:text-rose-800 hover:bg-rose-50 px-2.5 py-1 rounded-lg transition cursor-pointer"
+          >
+            移除此組
+          </button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">
+              課程或教學網站名稱 <span class="text-rose-500">*</span>
+            </label>
+            <input
+              type="text"
+              placeholder="例如：高一商概 AI 互動測驗平台"
+              class="url-title-input w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brandGreen/30 focus:border-brandGreen transition"
+            />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">
+              教學網址（URL） <span class="text-rose-500">*</span>
+            </label>
+            <input
+              type="url"
+              placeholder="https://..."
+              class="url-href-input w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brandGreen/30 focus:border-brandGreen transition"
+            />
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">
+            教學應用簡介（選填）
+          </label>
+          <input
+            type="text"
+            placeholder="簡短說明此網址的使用方式、適用年級或課堂活動設計"
+            class="url-note-input w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brandGreen/30 focus:border-brandGreen transition"
+          />
+        </div>
+        <p class="url-row-error hidden text-xs text-rose-600 font-medium"></p>
+      `;
+
+      row.querySelector('.remove-url-row-btn').addEventListener('click', () => {
+        row.remove();
+        refreshUrlRowNumbers();
+      });
+
+      return row;
+    }
+
+    /**
+     * 重新編號所有教學網址列並控制移除按鈕顯示狀態
+     */
+    function refreshUrlRowNumbers() {
+      const rows = dom.urlRowsContainer.querySelectorAll('.url-row');
+      rows.forEach((row, idx) => {
+        row.querySelector('.url-row-label').textContent = `教學網址 #${idx + 1}`;
+        const removeBtn = row.querySelector('.remove-url-row-btn');
+        removeBtn.classList.toggle('hidden', rows.length <= 1);
+      });
+    }
+
+    /**
+     * 重設教師繳交表單
+     */
+    function resetSubmissionForm() {
+      dom.submissionForm.reset();
+      dom.customSubjectInput.classList.add('hidden');
+      dom.customSubjectInput.value = '';
+      ['errTeacherName', 'errTeacherEmail', 'errTeacherSchool', 'errTeacherSubject'].forEach((id) => {
+        document.getElementById(id).classList.add('hidden');
+      });
+      dom.urlRowsContainer.innerHTML = '';
+      dom.urlRowsContainer.appendChild(createUrlRow(0));
+      refreshUrlRowNumbers();
+    }
+
+    /**
+     * 切換主要頁面分頁（網址繳交表單 / 成果展示）
+     */
+    function switchTab(tab) {
+      appState.currentTab = tab;
+
+      const activeBtnCls =
+        'px-5 py-2.5 rounded-xl text-sm sm:text-base font-semibold transition-all duration-200 border shadow-sm cursor-pointer bg-brandGreen text-white border-brandGreen hover:bg-brandGreenHover';
+      const inactiveBtnCls =
+        'px-5 py-2.5 rounded-xl text-sm sm:text-base font-semibold transition-all duration-200 border shadow-sm cursor-pointer bg-white text-slate-800 border-slate-300 hover:bg-slate-50';
+
+      dom.authStatusBadge.classList.toggle('hidden', !appState.isAuthenticated);
+
+      if (tab === 'form') {
+        dom.navFormBtn.className = activeBtnCls;
+        dom.navFormBtn.textContent = '網址繳交表單';
+        dom.navShowcaseBtn.className = inactiveBtnCls;
+
+        dom.formSection.classList.remove('hidden');
+        dom.loginSection.classList.add('hidden');
+        dom.showcaseSection.classList.add('hidden');
+      } else {
+        dom.navShowcaseBtn.className = activeBtnCls;
+        dom.navFormBtn.className = inactiveBtnCls;
+        dom.navFormBtn.textContent = '回到網址繳交表單';
+
+        dom.formSection.classList.add('hidden');
+        if (appState.isAuthenticated) {
+          dom.loginSection.classList.add('hidden');
+          dom.showcaseSection.classList.remove('hidden');
+          renderShowcase();
+        } else {
+          dom.showcaseSection.classList.add('hidden');
+          dom.loginSection.classList.remove('hidden');
+          dom.loginErrorMsg.classList.add('hidden');
+          dom.loginUsername.focus();
+        }
+      }
+    }
+
+    /**
+     * 處理教師表單送出（寫入雲端資料庫）
+     */
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+
+      let isValid = true;
+      const name = dom.teacherName.value.trim();
+      const email = dom.teacherEmail.value.trim();
+      const school = dom.teacherSchool.value.trim();
+      let subject = dom.teacherSubject.value;
+      if (subject === '其他') {
+        subject = dom.customSubjectInput.value.trim();
+      }
+
+      // 基本資料驗證
+      const toggleErr = (id, show) => {
+        const el = document.getElementById(id);
+        el.classList.toggle('hidden', !show);
+        if (show) isValid = false;
+      };
+
+      toggleErr('errTeacherName', !name);
+      toggleErr('errTeacherEmail', !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+      toggleErr('errTeacherSchool', !school);
+      toggleErr('errTeacherSubject', !subject);
+
+      // 驗證所有網址列
+      const urls = [];
+      const rows = dom.urlRowsContainer.querySelectorAll('.url-row');
+      rows.forEach((row) => {
+        const titleVal = row.querySelector('.url-title-input').value.trim();
+        const hrefVal = row.querySelector('.url-href-input').value.trim();
+        const noteVal = row.querySelector('.url-note-input').value.trim();
+        const errEl = row.querySelector('.url-row-error');
+
+        const normalized = normalizeUrl(hrefVal);
+        if (!titleVal) {
+          errEl.textContent = '請填寫課程／教學網站名稱';
+          errEl.classList.remove('hidden');
+          isValid = false;
+        } else if (!normalized) {
+          errEl.textContent = '請輸入有效的教學網址（例如：https://example.com）';
+          errEl.classList.remove('hidden');
+          isValid = false;
+        } else {
+          errEl.classList.add('hidden');
+          urls.push({
+            title: titleVal,
+            url: normalized,
+            note: noteVal,
+          });
+        }
+      });
+
+      if (!isValid) {
+        showToast('請檢查表單中標示紅色的必填欄位或網址格式。', 'error');
+        return;
+      }
+
+      // 確認已完成雲端驗證才寫入
+      if (!db || !currentUser) {
+        showToast('雲端資料庫尚未完成連線，請稍候片刻再試。', 'error');
+        return;
+      }
+
+      const newRecord = {
+        teacherName: name,
+        teacherEmail: email,
+        school,
+        subject,
+        submittedAt: getFormattedNow(),
+        createdAtMs: Date.now(),
+        submittedByUid: currentUser.uid,
+        urls,
+      };
+
+      try {
+        dom.submitFormBtn.disabled = true;
+        dom.submitFormBtnText.textContent = '正在儲存至雲端...';
+
+        await addDoc(getSubmissionsCollectionRef(), newRecord);
+
+        dom.successModalMsg.textContent = `感謝 ${name} 老師（${school}）的分享！已成功將 ${urls.length} 組教學網址儲存至雲端資料庫。`;
+        dom.successModal.classList.remove('hidden');
+        resetSubmissionForm();
+      } catch (error) {
+        console.error('儲存至雲端失敗：', error);
+        showToast('儲存失敗，請確認網路連線後再重新送出。', 'error');
+      } finally {
+        dom.submitFormBtn.disabled = false;
+        dom.submitFormBtnText.textContent = '送出教學網址成果';
+      }
+    }
+
+    /**
+     * 處理登入驗證 (chonu / admin)
+     */
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const user = dom.loginUsername.value.trim();
+      const pass = dom.loginPassword.value;
+
+      if (user === AUTH_CREDENTIALS.username && pass === AUTH_CREDENTIALS.password) {
+        appState.isAuthenticated = true;
+        dom.loginErrorMsg.classList.add('hidden');
+        dom.loginForm.reset();
+        showToast('驗證成功！歡迎檢視教學網址繳交成果。', 'success');
+        switchTab('showcase');
+      } else {
+        dom.loginErrorMsg.classList.remove('hidden');
+      }
+    }
+
+    /**
+     * 切換「一般成果展示」與「管理者檢視」模式
+     */
+    function setViewMode(mode) {
+      appState.viewMode = mode;
+
+      const activeModeCls = 'px-5 py-2.5 rounded-xl text-sm sm:text-base font-bold transition cursor-pointer bg-white text-slate-900 border-2 border-brandGreen border-b-4';
+      const inactiveModeCls = 'px-5 py-2.5 rounded-xl text-sm sm:text-base font-semibold transition cursor-pointer bg-white text-slate-700 border border-slate-300 hover:bg-slate-50';
+
+      if (mode === 'public') {
+        dom.modePublicBtn.className = activeModeCls;
+        dom.modeAdminBtn.className = inactiveModeCls;
+        dom.exportCsvBtn.classList.add('hidden');
+        dom.showcaseSubtitle.textContent = '瀏覽研習教師分享的教學活動與課程資源。公開展示不提供教師姓名或電子郵件。';
+      } else {
+        dom.modeAdminBtn.className = activeModeCls;
+        dom.modePublicBtn.className = inactiveModeCls;
+        dom.exportCsvBtn.classList.remove('hidden');
+        dom.showcaseSubtitle.textContent = '管理者檢視模式：完整顯示具名教師姓名、電子郵件，並支援匯出 CSV 與刪除管理。';
+      }
+
+      renderResultsList();
+    }
+
+    /**
+     * 更新統計數據與下拉選單選項
+     */
+    function renderShowcase() {
+      const list = appState.submissions;
+
+      // 計算統計指標
+      const teacherCount = list.length;
+      const totalUrls = list.reduce((sum, item) => sum + item.urls.length, 0);
+      const uniqueSchools = new Set(list.map((item) => item.school));
+      const lastUpdate = list.length > 0 ? list[0].submittedAt : '—';
+
+      dom.statTeachers.textContent = teacherCount > 0 ? `${teacherCount}` : '—';
+      dom.statUrls.textContent = totalUrls > 0 ? `${totalUrls}` : '—';
+      dom.statSchools.textContent = uniqueSchools.size > 0 ? `${uniqueSchools.size}` : '—';
+      dom.statLastUpdate.textContent = lastUpdate;
+
+      // 更新學校與科別下拉選單 (保留當前選擇值)
+      const currentSchool = dom.schoolFilter.value;
+      const currentSubject = dom.subjectFilter.value;
+
+      const schools = Array.from(uniqueSchools).sort((a, b) => a.localeCompare(b, 'zh-Hant'));
+      const subjects = Array.from(new Set(list.map((item) => item.subject))).sort((a, b) =>
+        a.localeCompare(b, 'zh-Hant')
+      );
+
+      dom.schoolFilter.innerHTML = '<option value="">全部學校</option>';
+      schools.forEach((s) => {
+        const opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = s;
+        dom.schoolFilter.appendChild(opt);
+      });
+      dom.schoolFilter.value = schools.includes(currentSchool) ? currentSchool : '';
+
+      dom.subjectFilter.innerHTML = '<option value="">全部科別或領域</option>';
+      subjects.forEach((sub) => {
+        const opt = document.createElement('option');
+        opt.value = sub;
+        opt.textContent = sub;
+        dom.subjectFilter.appendChild(opt);
+      });
+      dom.subjectFilter.value = subjects.includes(currentSubject) ? currentSubject : '';
+
+      setViewMode(appState.viewMode);
+    }
+
+    /**
+     * 根據搜尋與篩選條件渲染成果清單
+     */
+    function renderResultsList() {
+      const keyword = dom.searchInput.value.trim().toLowerCase();
+      const selectedSchool = dom.schoolFilter.value;
+      const selectedSubject = dom.subjectFilter.value;
+      const isAdmin = appState.viewMode === 'admin';
+
+      const hasFilter = Boolean(keyword || selectedSchool || selectedSubject);
+      dom.clearFiltersBtn.classList.toggle('hidden', !hasFilter);
+
+      const filtered = appState.submissions.filter((item) => {
+        if (selectedSchool && item.school !== selectedSchool) return false;
+        if (selectedSubject && item.subject !== selectedSubject) return false;
+        if (keyword) {
+          const urlMatches = item.urls.some(
+            (u) =>
+              u.title.toLowerCase().includes(keyword) ||
+              u.url.toLowerCase().includes(keyword) ||
+              (u.note && u.note.toLowerCase().includes(keyword))
+          );
+          const basicMatches =
+            item.school.toLowerCase().includes(keyword) ||
+            item.subject.toLowerCase().includes(keyword) ||
+            (isAdmin &&
+              (item.teacherName.toLowerCase().includes(keyword) ||
+                item.teacherEmail.toLowerCase().includes(keyword)));
+          if (!urlMatches && !basicMatches) return false;
+        }
+        return true;
+      });
+
+      const filteredUrlCount = filtered.reduce((sum, item) => sum + item.urls.length, 0);
+      dom.resultCountText.textContent = `顯示 ${filtered.length} 筆提交紀錄（共 ${filteredUrlCount} 個教學網址）`;
+
+      if (appState.isLoadingCloud) {
+        dom.resultsList.innerHTML = `
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 py-12 px-6 text-center">
+            <p class="text-slate-600 font-semibold mb-1">正在從雲端載入教學網址成果...</p>
+            <p class="text-slate-400 text-sm">請稍候片刻</p>
+          </div>
+        `;
+        return;
+      }
+
+      if (filtered.length === 0) {
+        dom.resultsList.innerHTML = `
+          <div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 py-12 px-6 text-center">
+            <p class="text-slate-600 font-semibold mb-1">目前找不到符合條件的教學網址成果</p>
+            <p class="text-slate-400 text-sm">請嘗試調整搜尋關鍵字或篩選條件，或前往表單新增資料。</p>
+          </div>
+        `;
+        return;
+      }
+
+      dom.resultsList.innerHTML = filtered
+        .map((item) => {
+          const urlsHtml = item.urls
+            .map(
+              (u) => `
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl bg-slate-50 border border-slate-200/80 px-4 py-3 hover:border-brandGreen/50 hover:bg-emerald-50/30 transition">
+                <div class="min-w-0 flex-1">
+                  <a
+                    href="${escapeHtml(u.url)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group inline-flex items-center gap-1.5 text-sm sm:text-base font-bold text-slate-900 hover:text-brandGreen transition break-all"
+                  >
+                    <span>${escapeHtml(u.title)}</span>
+                    <svg class="w-4 h-4 shrink-0 text-brandGreen group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                    </svg>
+                  </a>
+                  <p class="text-xs text-slate-500 truncate mt-0.5">${escapeHtml(u.url)}</p>
+                  ${
+                    u.note
+                      ? `<p class="text-xs sm:text-sm text-slate-600 mt-1.5">${escapeHtml(u.note)}</p>`
+                      : ''
+                  }
+                </div>
+                <div class="shrink-0">
+                  <a
+                    href="${escapeHtml(u.url)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-white bg-brandGreen hover:bg-brandGreenHover transition w-full sm:w-auto"
+                  >
+                    新視窗開啟
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            `
+            )
+            .join('');
+
+          const adminInfoHtml = isAdmin
+            ? `
+              <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs sm:text-sm text-slate-700 bg-amber-50/70 border border-amber-200/80 rounded-xl px-3.5 py-2 mt-2">
+                <span class="font-bold text-slate-900">提交教師：${escapeHtml(item.teacherName)}</span>
+                <span class="text-slate-600">Email：${escapeHtml(item.teacherEmail)}</span>
+              </div>
+            `
+            : '';
+
+          const deleteBtnHtml = isAdmin
+            ? `
+              <button
+                type="button"
+                data-delete-id="${escapeHtml(item.id)}"
+                class="delete-record-btn text-xs font-semibold text-rose-600 hover:text-rose-800 hover:bg-rose-50 border border-rose-200 px-3 py-1.5 rounded-lg transition cursor-pointer"
+              >
+                刪除紀錄
+              </button>
+            `
+            : '';
+
+          return `
+            <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs hover:shadow-md transition">
+              <div class="flex flex-wrap items-start justify-between gap-3 mb-3">
+                <div>
+                  <div class="flex flex-wrap items-center gap-2">
+                    <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs sm:text-sm font-bold bg-slate-100 text-slate-800">
+                      ${escapeHtml(item.school)}
+                    </span>
+                    <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs sm:text-sm font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                      ${escapeHtml(item.subject)}
+                    </span>
+                    <span class="text-xs text-slate-400">
+                      提交時間：${escapeHtml(item.submittedAt)}
+                    </span>
+                  </div>
+                  ${adminInfoHtml}
+                </div>
+                ${deleteBtnHtml}
+              </div>
+
+              <div class="space-y-2.5">
+                ${urlsHtml}
+              </div>
+            </article>
+          `;
+        })
+        .join('');
+
+      // 綁定管理者刪除按鈕事件
+      if (isAdmin) {
+        dom.resultsList.querySelectorAll('.delete-record-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-delete-id');
+            const target = appState.submissions.find((s) => s.id === id);
+            if (!target) return;
+            appState.pendingDeleteId = id;
+            dom.deleteModalDesc.textContent = `確定要刪除「${target.school}－${target.teacherName} 老師」的 ${target.urls.length} 組教學網址紀錄嗎？`;
+            dom.deleteModal.classList.remove('hidden');
+          });
+        });
+      }
+    }
+
+    /**
+     * 匯出 CSV 清單 (管理者檢視專用)
+     */
+    function exportToCsv() {
+      if (appState.submissions.length === 0) {
+        showToast('目前沒有可匯出的資料。', 'info');
+        return;
+      }
+
+      const headers = ['提交時間', '教師姓名', '電子郵件', '服務學校', '任教科別或領域', '課程名稱', '教學網址', '簡介說明'];
+      const rows = [];
+
+      appState.submissions.forEach((item) => {
+        item.urls.forEach((u) => {
+          rows.push([
+            item.submittedAt,
+            item.teacherName,
+            item.teacherEmail,
+            item.school,
+            item.subject,
+            u.title,
+            u.url,
+            u.note || '',
+          ]);
+        });
+      });
+
+      const csvEscape = (val) => `"${String(val).replace(/"/g, '""')}"`;
+      const csvContent =
+        '\uFEFF' + [headers.map(csvEscape).join(','), ...rows.map((r) => r.map(csvEscape).join(','))].join('\n');
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `高中職教師教學網址繳交成果_${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      showToast('已成功匯出 CSV 成果清單！', 'success');
+    }
+
+    /**
+     * 啟用防止右鍵與檢視原始碼安全鎖
+     * 封鎖滑鼠右鍵選單及常見開發者工具／檢視原始碼快捷鍵（保留表單內 Ctrl+V 貼上網址）
+     */
+    function initSecurityLock() {
+      let lastWarnTime = 0;
+      const notifyLock = (msg) => {
+        const now = Date.now();
+        if (now - lastWarnTime > 2500) {
+          lastWarnTime = now;
+          showToast(msg, 'info');
+        }
+      };
+
+      // 封鎖滑鼠右鍵選單
+      document.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        notifyLock('本系統已啟用安全保護，已停用右鍵功能。');
+      });
+
+      // 封鎖 F12、檢視原始碼 (Ctrl+U)、另存網頁 (Ctrl+S) 及開發者工具快捷鍵
+      document.addEventListener('keydown', (e) => {
+        const key = (e.key || '').toUpperCase();
+        const isCtrlOrMeta = e.ctrlKey || e.metaKey;
+
+        const isF12 = key === 'F12' || e.keyCode === 123;
+        const isDevToolsWin = isCtrlOrMeta && e.shiftKey && ['I', 'J', 'C', 'K'].includes(key);
+        const isDevToolsMac = isCtrlOrMeta && e.altKey && ['I', 'J', 'C', 'U'].includes(key);
+        const isViewSourceOrSave = isCtrlOrMeta && ['U', 'S'].includes(key);
+
+        if (isF12 || isDevToolsWin || isDevToolsMac || isViewSourceOrSave) {
+          e.preventDefault();
+          e.stopPropagation();
+          notifyLock('本系統已啟用安全保護，禁止檢視原始碼或開啟開發者工具。');
+        }
+      });
+    }
+
+    /**
+     * 事件綁定與初始化
+     */
+    function initApp() {
+      // 啟用防止右鍵與檢視原始碼安全鎖
+      initSecurityLock();
+
+      // 初始化第一組網址輸入列
+      resetSubmissionForm();
+
+      // 導覽切換
+      dom.navFormBtn.addEventListener('click', () => switchTab('form'));
+      dom.navShowcaseBtn.addEventListener('click', () => switchTab('showcase'));
+
+      // 登出
+      dom.logoutBtn.addEventListener('click', () => {
+        appState.isAuthenticated = false;
+        appState.viewMode = 'public';
+        showToast('已登出管理者帳號。', 'info');
+        switchTab('form');
+      });
+
+      // 科別選擇「其他」時顯示自訂輸入框
+      dom.teacherSubject.addEventListener('change', () => {
+        const isOther = dom.teacherSubject.value === '其他';
+        dom.customSubjectInput.classList.toggle('hidden', !isOther);
+        if (isOther) dom.customSubjectInput.focus();
+      });
+
+      // 新增網址列
+      dom.addUrlRowBtn.addEventListener('click', () => {
+        const count = dom.urlRowsContainer.querySelectorAll('.url-row').length;
+        dom.urlRowsContainer.appendChild(createUrlRow(count));
+        refreshUrlRowNumbers();
+      });
+
+      // 重設表單
+      dom.resetFormBtn.addEventListener('click', () => {
+        resetSubmissionForm();
+        showToast('已清除表單內容。', 'info');
+      });
+
+      // 送出表單與登入表單
+      dom.submissionForm.addEventListener('submit', handleFormSubmit);
+      dom.loginForm.addEventListener('submit', handleLoginSubmit);
+
+      // 成功視窗按鈕
+      dom.modalContinueBtn.addEventListener('click', () => {
+        dom.successModal.classList.add('hidden');
+      });
+      dom.modalGoShowcaseBtn.addEventListener('click', () => {
+        dom.successModal.classList.add('hidden');
+        switchTab('showcase');
+      });
+
+      // 成果展示模式切換
+      dom.modePublicBtn.addEventListener('click', () => setViewMode('public'));
+      dom.modeAdminBtn.addEventListener('click', () => setViewMode('admin'));
+
+      // 重新整理成果資料（主動向雲端重新抓取最新資料）
+      dom.refreshDataBtn.addEventListener('click', async () => {
+        if (!db || !currentUser) {
+          showToast('雲端資料庫尚未就緒，請稍後再試。', 'error');
+          return;
+        }
+        dom.refreshIcon.classList.add('animate-spin');
+        try {
+          const snapshot = await getDocs(getSubmissionsCollectionRef());
+          appState.submissions = parseAndSortSnapshot(snapshot);
+          renderShowcase();
+          showToast('已從雲端重新整理最新成果資料。', 'success');
+        } catch (error) {
+          console.error('重新整理資料失敗：', error);
+          showToast('重新整理失敗，請稍後再試。', 'error');
+        } finally {
+          setTimeout(() => dom.refreshIcon.classList.remove('animate-spin'), 400);
+        }
+      });
+
+      // 匯出 CSV
+      dom.exportCsvBtn.addEventListener('click', exportToCsv);
+
+      // 搜尋與篩選事件
+      dom.searchInput.addEventListener('input', renderResultsList);
+      dom.schoolFilter.addEventListener('change', renderResultsList);
+      dom.subjectFilter.addEventListener('change', renderResultsList);
+      dom.clearFiltersBtn.addEventListener('click', () => {
+        dom.searchInput.value = '';
+        dom.schoolFilter.value = '';
+        dom.subjectFilter.value = '';
+        renderResultsList();
+      });
+
+      // 刪除確認視窗事件（自雲端刪除該筆文件）
+      dom.cancelDeleteBtn.addEventListener('click', () => {
+        appState.pendingDeleteId = null;
+        dom.deleteModal.classList.add('hidden');
+      });
+      dom.confirmDeleteBtn.addEventListener('click', async () => {
+        if (!appState.pendingDeleteId || !db || !currentUser) return;
+        const targetId = appState.pendingDeleteId;
+        dom.confirmDeleteBtn.disabled = true;
+        dom.confirmDeleteBtn.textContent = '刪除中...';
+
+        try {
+          const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'submissions', targetId);
+          await deleteDoc(docRef);
+          appState.pendingDeleteId = null;
+          dom.deleteModal.classList.add('hidden');
+          showToast('已從雲端永久刪除該筆提交紀錄。', 'info');
+        } catch (error) {
+          console.error('刪除雲端紀錄失敗：', error);
+          showToast('刪除失敗，請稍後再試。', 'error');
+        } finally {
+          dom.confirmDeleteBtn.disabled = false;
+          dom.confirmDeleteBtn.textContent = '確定刪除';
+        }
+      });
+
+      // 預設停留在網址繳交表單頁面，並啟動雲端資料庫連線
+      switchTab('form');
+      initCloudStorage();
+    }
+
+    // 啟動應用程式
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
